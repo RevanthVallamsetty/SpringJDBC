@@ -16,15 +16,15 @@ public class ProductDAO implements IProductDAO{
 
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
-	
+
 	private final static String insertQuery = "insert into test.product(id,name,price,description,quantity) values(?,?,?,?,?)";
-	
+
 	@Override
 	public Product findById(int id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
-	
+
 
 	@Override
 	public List<Product> findAll() {
@@ -34,12 +34,12 @@ public class ProductDAO implements IProductDAO{
 
 	@Override
 	public boolean add(Product product) {
-		
+
 		int noOfRows = jdbcTemplate.update(insertQuery,product.getId(),product.getName(),product.getPrice(),product.getDescription(),product.getQuantity());
-		
+
 		if(noOfRows == 1)
 			return true;
-		
+
 		return false;
 	}
 
@@ -59,22 +59,22 @@ public class ProductDAO implements IProductDAO{
 	@Override
 	public boolean insertBatch(List<Product> products) {
 		jdbcTemplate.batchUpdate(insertQuery, new BatchPreparedStatementSetter() {
-			
-	@Override
-	public void setValues(PreparedStatement ps, int i) throws SQLException {
-		Product product = products.get(i);
-		ps.setInt(1, product.getId());
-		ps.setString(2, product.getName());
-		ps.setFloat(3, product.getPrice());
-		ps.setString(4, product.getDescription());
-		ps.setInt(5, product.getQuantity());
-	}
 
-	@Override
-	public int getBatchSize() {
-		// TODO Auto-generated method stub
-		return products.size();
-	}
+			@Override
+			public void setValues(PreparedStatement ps, int i) throws SQLException {
+				Product product = products.get(i);
+				ps.setInt(1, product.getId());
+				ps.setString(2, product.getName());
+				ps.setFloat(3, product.getPrice());
+				ps.setString(4, product.getDescription());
+				ps.setInt(5, product.getQuantity());
+			}
+
+			@Override
+			public int getBatchSize() {
+				// TODO Auto-generated method stub
+				return products.size();
+			}
 		});
 		return true;
 	}
